@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class ArrayChallenges {
 	
-	public static void printKLargestFromArrayUsingDefaultSort(Integer[] arr, int k) {
+	private static void printKLargestFromArrayUsingDefaultSort(Integer[] arr, int k) {
 		Arrays.sort(arr, java.util.Collections.reverseOrder());
 		for(int i=0; i<k; i++)
 			System.out.print(arr[i]+"->");
@@ -19,7 +19,7 @@ public class ArrayChallenges {
 		System.out.println(Arrays.toString(arr));
 	}
 	
-	public static void printKLargestFromArrayUsingBubbleSort(Integer[] arr, int k) {
+	private static void printKLargestFromArrayUsingBubbleSort(Integer[] arr, int k) {
 		int counter=0;
 		int len = arr.length;
 		for(int i=0; i<len-1; i++) {
@@ -39,7 +39,7 @@ public class ArrayChallenges {
 		System.out.println(Arrays.toString(arr)+"->"+counter);
 	}
 	
-	public static void printKLargestFromArrayUsingOptimizedBubbleSort(Integer[] arr, int k) {
+	private static void printKLargestFromArrayUsingOptimizedBubbleSort(Integer[] arr, int k) {
 		int counter=0;
 		int len = arr.length;
 		// We need not sort the entire list. Just the final k elements needs to be sorted out.
@@ -61,7 +61,7 @@ public class ArrayChallenges {
 		System.out.println(Arrays.toString(arr)+"->"+counter);
 	}
 	
-	public static boolean doesInputHadPythagoreanTripletUsingBruteForce(int[] arr) {
+	private static boolean doesInputHadPythagoreanTripletUsingBruteForce(int[] arr) {
 		int n = arr.length;
 		for(int i=0; i<n; i++) {
 			for(int j=i+1; j<n; j++) {
@@ -75,12 +75,15 @@ public class ArrayChallenges {
 		return false;
 	}
 	
-	public static boolean doesInputHadPythagoreanTripletUsingSquaringAndSorting(int[] arr) {
+	private static boolean doesInputHadPythagoreanTripletUsingTwoPointerTechnique(int[] arr) {
+		// Sort and save the sum of squares in the array
+		Arrays.sort(arr);
+
+		// Sorting can be done after this step or before this step. Does not matter
 		int n = arr.length;
 		for (int i=0; i<n; i++)
 			arr[i] = arr[i] * arr[i];
 		
-		Arrays.sort(arr);
 		
 		// Start from last element of list (as that is the largest), skip first 2 (to be used for summing for a triplet)
 		// Here is where we are being a bit efficient
@@ -111,6 +114,28 @@ public class ArrayChallenges {
 		// Seems like nothing worked out in the entire loop, so simply return false
 		return false;
 	}
+	
+	// This uses the same two-pointer technique as above method doesInputHadPythagoreanTripletUsingTwoPointerTechnique()
+	private static void checkIfArrayContainSumNumbers(int[] arr, int sum) {
+		Arrays.sort(arr);
+		
+		int len = arr.length;
+		for(int i=len-1; i>=2; i--) {
+			int l=0, r=i;
+			
+			while(l < r) {
+				if(arr[l] + arr[r] == sum) {
+					System.out.println("Sum found: "+arr[l]+" + "+arr[r]+" = "+sum);
+					return;
+				}
+				else if(arr[l] + arr[r] > sum)
+					r--;
+				else
+					l++;
+			}
+		}
+		System.out.println("Sum not found in array: "+Arrays.toString(arr));
+	}
 
 	public static void main(String[] args) {
 		Integer[] arr = new Integer[] {1, 23, 12, 9, 30, 2, 50};
@@ -120,9 +145,17 @@ public class ArrayChallenges {
 		arr = new Integer[] {1, 23, 12, 9, 30, 2, 50};
 		printKLargestFromArrayUsingOptimizedBubbleSort(arr, 3);
 		
-		int[] ar = {3, 1, 4, 6, 5, 2};
-		System.out.println(doesInputHadPythagoreanTripletUsingBruteForce(ar));
-		System.out.println(doesInputHadPythagoreanTripletUsingSquaringAndSorting(ar));
+		int[] ar1 = {3, 1, 4, 6, 5, 2};
+		System.out.println(doesInputHadPythagoreanTripletUsingBruteForce(ar1));
+		System.out.println(doesInputHadPythagoreanTripletUsingTwoPointerTechnique(ar1));
+		
+		int[] ar2 = { 1, 4, 45, 6, 10, -8 };
+		int sum = 16;
+		checkIfArrayContainSumNumbers(ar2, sum);
+		
+		int[] ar3 = { -1, -2, 3, 2, -3, 0 };
+		sum = -3;
+		checkIfArrayContainSumNumbers(ar3, sum);
 	}
 
 }
